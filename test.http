@@ -1,0 +1,41 @@
+@host=http://localhost:3000
+
+
+###GET recipe list
+GET {{host}}/api/recipes
+
+###Add recipe
+POST {{host}}/api/recipes
+
+  {
+  "title": "Pancakes",
+  "tags": ["breakfast", "sweet", "quick"],
+  "ingredients": [
+    "flour",
+    "milk",
+    "egg",
+    "sugar",
+    "baking powder",
+    "butter",
+    "maple syrup"
+  ],
+  "steps": [
+    "In a bowl, mix flour, sugar, and baking powder.",
+    "In a separate bowl, whisk milk and egg together.",
+    "Gradually combine the wet and dry ingredients until smooth.",
+    "Heat a pan with butter and pour in batter to form pancakes. Cook until golden on both sides.",
+    "Serve with butter and maple syrup."
+  ]
+}
+
+
+###Get recipe detail
+GET {{host}}/api/recipes/1
+
+###Update recipe
+PUT {{host}}/api/recipes/1
+
+###Remove recipe
+DELETE  {{host}}/api/recipes/1
+
+
