@@ -1,6 +1,6 @@
 'use client';
 
-import { getrecipe } from '@/actions/recipes';
+import { editrecipe, getrecipe } from '@/actions/recipes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Button from '@/components/atoms/Button';
@@ -34,22 +34,8 @@ export default function RecipeEdit({
       return;
     }
 
-    await fetch('/api/recipes/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title,
-        tags: recipeTags,
-        ingredients: recipeIngredients,
-        steps: recipeSteps,
-      }),
-    }).then((response) => {
-      console.log('어떡해', title, tags, ingredients, steps);
-      if (!response.ok) {
-        return alert('Error saving recipe');
-      }
-      router.push('/recipes');
-    });
+    editrecipe(recipeId, title, recipeTags, recipeIngredients, recipeSteps);
+    router.push('/recipes');
   }
 
   function addTag(e: React.MouseEvent) {

@@ -3,6 +3,7 @@ import { auth } from './lib/auth';
 
 export async function middleware(req: NextRequest) {
   const session = await auth();
+  // const session = JSON.parse(localStorage.getItem('user') ?? '');
   const didLogin = !!session?.user;
   if (!didLogin) {
     const callbackUrl = encodeURIComponent(req.nextUrl.pathname);

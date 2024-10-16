@@ -44,3 +44,82 @@ export const removerecipe = (recipeId: number) => {
   );
   return;
 };
+
+export const editrecipe = (
+  recipeId: number,
+  title: string,
+  recipeTags: string[],
+  recipeIngredients: string[],
+  recipeSteps: string[]
+) => {
+  const session = JSON.parse(localStorage.getItem('user') ?? '');
+  const s: MySession = { ...session };
+
+  // 레시피에서 특정 id에 해당하는 레시피를 찾음
+  const versions = s.recipes.find((r) => r.id === recipeId)?.versions ?? [];
+
+  // 각 레시피를 업데이트
+  const recipes = s.recipes.map((r) =>
+    r.id === +recipeId
+      ? {
+          ...r, // 레시피 객체의 다른 필드도 유지
+          versions: [
+            ...r.versions,
+            {
+              id: Math.max(...versions.map(({ id }) => id), 0) + 1, // 새로운 버전 id
+              title: title, // 새로운 제목
+              tags: recipeTags, // 새로운 태그
+              ingredients: recipeIngredients, // 새로운 재료
+              steps: recipeSteps, // 새로운 조리 과정
+              date: new Date().toISOString(), // 수정된 날짜
+            },
+          ],
+        }
+      : r
+  );
+
+  console.log('🚀 ~ recipes:', recipes);
+
+  // 로컬 스토리지에 새로운 데이터를 저장
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      ...s,
+      recipes: recipes, // 업데이트된 레시피 배열 저장
+    })
+  );
+  return;
+};
+
+export const putrecipe = (
+  title: string,
+  recipeTags: string[],
+  recipeIngredients: string[],
+  recipeSteps: string[]
+) => {
+  const session = JSON.parse(localStorage.getItem('user') ?? '');
+  const s: MySession = { ...session };
+  const id = Math.max(...s.recipes.map(({ id }) => id), 0) + 1;
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      ...s,
+      recipes: [
+        ...s.recipes,
+        {
+          id,
+          versions: [
+            {
+              id: 1,
+              title: title,
+              tags: recipeTags,
+              ingredients: recipeIngredients,
+              steps: recipeSteps,
+              date: new Date().toISOString(),
+            },
+          ],
+        },
+      ],
+    })
+  );
+};
