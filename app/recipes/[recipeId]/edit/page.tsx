@@ -10,7 +10,7 @@ export default function RecipeEdit({
 }: {
   params: { recipeId: number };
 }) {
-  const r = getrecipe(+recipeId);
+  const r = getrecipe(+recipeId)[0];
   const [tags, setTags] = useState<string[]>(r.tags);
   const [ingredients, setIngredients] = useState<string[]>(r.ingredients);
   const [steps, setSteps] = useState<string[]>(r.steps);

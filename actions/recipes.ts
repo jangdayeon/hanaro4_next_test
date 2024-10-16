@@ -27,8 +27,20 @@ export const restorerecipe = (recipeId: number, versionId: number) => {
       : r
   );
 
-  // session을 localStorage에 다시 저장
   localStorage.setItem('user', JSON.stringify({ ...session, recipes: recipe }));
-
   return getrecipe(+recipeId);
+};
+
+export const removerecipe = (recipeId: number) => {
+  const session: MySession = {
+    ...JSON.parse(localStorage.getItem('user') ?? ''),
+  };
+  localStorage.setItem(
+    'user',
+    JSON.stringify({
+      ...session,
+      recipes: session.recipes.filter((r) => r.id !== recipeId),
+    })
+  );
+  return;
 };
