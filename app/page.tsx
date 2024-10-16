@@ -3,10 +3,14 @@
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import Button from '@/components/atoms/Button';
+import { SampleSession } from '../hooks/session-context';
 
 export default function Home() {
   const session = useSession().data?.user?.email ?? '';
-  localStorage.setItem('user', session);
+  localStorage.setItem(
+    'user',
+    JSON.stringify({ ...SampleSession, loginUser: session })
+  );
 
   return (
     <>

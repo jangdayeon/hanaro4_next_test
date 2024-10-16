@@ -1,5 +1,6 @@
 'use client';
 
+import { type MySession } from '@/hooks/session-context';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Button from '@/components/atoms/Button';
@@ -28,21 +29,46 @@ export default function RecipePut() {
       return;
     }
 
-    await fetch('/api/recipes/', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        title,
-        tags: recipeTags,
-        ingredients: recipeIngredients,
-        steps: recipeSteps,
-      }),
-    }).then((response) => {
-      if (!response.ok) {
-        return alert('Error saving recipe');
-      }
-      router.push('/recipes');
-    });
+    // await fetch('/api/recipes/', {
+    //   method: 'POST',
+    //   headers: { 'Content-Type': 'application/json' },
+    //   body: JSON.stringify({
+    //     title,
+    //     tags: recipeTags,
+    //     ingredients: recipeIngredients,
+    //     steps: recipeSteps,
+    //   }),
+    // }).then((response) => {
+    //   if (!response.ok) {
+    //     return alert('Error saving recipe');
+    //   }
+    //   router.push('/recipes');
+    // });
+
+    const session = JSON.parse(localStorage.getItem('user') ?? '');
+    const s: MySession = { ...session };
+    const id = Math.max(...s.recipes.map(({ id }) => id), 0) + 1;
+    localStorage.setItem(
+      'user',
+      JSON.stringify({
+        ...s,
+        recipes: [
+          ...s.recipes,
+          {
+            id,
+            versions: [
+              1,
+              title,
+              recipeTags,
+              recipeIngredients,
+              recipeSteps,
+              new Date().toISOString(),
+            ],
+          },
+        ],
+      })
+    );
+    router.push('/recipes');
   }
 
   function addTag(e: React.MouseEvent) {
