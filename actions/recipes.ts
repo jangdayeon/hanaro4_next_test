@@ -1,26 +1,34 @@
-import { recipe, recipes } from '@/app/api/recipes/recipedata';
+import { defaultVersions, Recipe } from '@/app/api/recipes/recipedata';
+import { MySession } from '@/hooks/session-context';
 
-export const getrecipe = (recipeId: number) =>
-  recipes.find(({ id }) => id === recipeId) as recipe;
-
-export const save = (
-  id: number,
-  title: string,
-  tags: string[],
-  ingredients: string[],
-  steps: string[]
-) => {
-  const recipe = recipes.find((recipe) => recipe.id === id);
-  if (!recipe) return Response.json({ code: 404, message: 'Not Found' });
-
-  recipe.title = title;
-  recipe.tags = tags;
-  recipe.ingredients = ingredients;
-  recipe.steps = steps;
-
-  return recipe;
+export const getrecipe = (recipeId: number) => {
+  const session: MySession = {
+    ...JSON.parse(localStorage.getItem('user') ?? ''),
+  };
+  const recipe = session.recipes.find((r) => r.id === recipeId);
+  if (!recipe || !recipe.versions || recipe.versions.length === 0) {
+    return defaultVersions;
+  }
+  return recipe?.versions.sort((a, b) => b.date.localeCompare(a.date));
 };
 
-// export const remove = (
-//   id:
-// )
+export const restorerecipe = (recipeId: number, versionId: number) => {
+  const session: MySession = {
+    ...JSON.parse(localStorage.getItem('user') ?? ''),
+  };
+  const recipe: Recipe[] = session.recipes.map((r) =>
+    r.id === +recipeId
+      ? {
+          id: +recipeId,
+          versions: r.versions.map((v) =>
+            v.id === versionId ? { ...v, date: new Date().toISOString() } : v
+          ),
+        }
+      : r
+  );
+
+  // session을 localStorage에 다시 저장
+  localStorage.setItem('user', JSON.stringify({ ...session, recipes: recipe }));
+
+  return getrecipe(+recipeId);
+};

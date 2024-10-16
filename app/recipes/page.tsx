@@ -18,13 +18,12 @@ export default function recipes() {
     ...JSON.parse(localStorage.getItem('user') ?? ''),
   };
   const recipes = session.recipes.map((r) => {
-    console.log('확인', r.versions);
     const sortedVersion = r.versions.sort((a, b) =>
       b.date.localeCompare(a.date)
     );
-    console.log('🚀 ~ recipes ~ recipes:', sortedVersion);
     return sortedVersion[0];
   });
+
   return (
     <>
       {recipes?.length ? (

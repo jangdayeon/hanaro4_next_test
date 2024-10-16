@@ -1,11 +1,29 @@
 'use client';
 
-import { getrecipe } from '@/actions/recipes';
+import { getrecipe, restorerecipe } from '@/actions/recipes';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import Button from '@/components/atoms/Button';
 import DelBtn from '@/components/atoms/DelBtn';
+
+function formatDate(dateString: string): string {
+  const date = new Date(dateString);
+
+  const year = date.getFullYear();
+  const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 월은 0부터 시작하므로 +1
+  const day = date.getDate().toString().padStart(2, '0');
+
+  let hours = date.getHours();
+  const minutes = date.getMinutes().toString().padStart(2, '0');
+  const seconds = date.getSeconds().toString().padStart(2, '0');
+
+  const ampm = hours >= 12 ? '오후' : '오전';
+  hours = hours % 12 || 12; // 12시간 형식으로 변환
+  const formattedHours = hours.toString().padStart(2, '0');
+
+  return `수정일: ${year}.${month}.${day}. ${ampm} ${formattedHours}:${minutes}:${seconds}`;
+}
 
 export default function Recipe({
   params: { recipeId },
@@ -17,12 +35,12 @@ export default function Recipe({
     []
   );
 
-  const { id, title, tags, ingredients, steps } = getrecipe(+recipeId);
+  const [recipes, setRecipes] = useState(getrecipe(+recipeId));
+  const { id, title, tags, ingredients, steps } = recipes[0];
 
-  // steps가 변경될 때마다 timers를 초기화
   useEffect(() => {
     setTimers(steps.map(() => ({ time: 0, isRunning: false })));
-  }, [steps]);
+  }, []);
 
   if (!id) return notFound();
 
@@ -52,6 +70,10 @@ export default function Recipe({
         return newTimers;
       });
     }, 1000);
+  };
+
+  const restore = (versionId: number) => {
+    setRecipes(restorerecipe(recipeId, versionId));
   };
 
   return (
@@ -119,6 +141,17 @@ export default function Recipe({
 
       <div className='p-3'>
         <h2 className='font-semibold text-lg'>수정 기록</h2>
+        <ol>
+          {recipes?.map((r, i) => (
+            <li key={i}>
+              <span className='font-bold'>버전{i + 1} </span>
+              {formatDate(r.date)}
+              <Button variant='btn-primary' onClick={() => restore(r.id)}>
+                이 버전으로 복원
+              </Button>
+            </li>
+          ))}
+        </ol>
       </div>
 
       <div className='p-3 flex flex-row gap-2'>

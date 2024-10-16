@@ -12,6 +12,17 @@ export type Recipe = {
   versions: RecipeVersion[]; // 각 레시피의 버전 배열
 };
 
+export const defaultVersions: RecipeVersion[] = [
+  {
+    id: 0,
+    date: '',
+    steps: [],
+    ingredients: [],
+    title: '',
+    tags: [],
+  },
+];
+
 // 예시 레시피 데이터
 export const recipes: Recipe[] = [
   {
