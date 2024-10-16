@@ -1,11 +1,14 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { putrecipe } from '@/lib/recipes';
 import Button from '@/components/atoms/Button';
 
 export default function RecipePut() {
+  const session = useSession().data?.user?.email ?? '';
+
   const [tags, setTags] = useState<string[]>([]);
   const [ingredients, setIngredients] = useState<string[]>([]);
   const [steps, setSteps] = useState<string[]>([]);
@@ -32,7 +35,7 @@ export default function RecipePut() {
       return;
     }
 
-    putrecipe(title, recipeTags, recipeIngredients, recipeSteps);
+    putrecipe(title, recipeTags, recipeIngredients, recipeSteps, session);
     router.push('/recipes');
   }
 

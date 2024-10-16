@@ -1,9 +1,9 @@
 import { defaultVersions, Recipe } from '@/app/api/recipes/recipedata';
 import { MySession } from '@/hooks/session-context';
 
-export const getallrecipe = () => {
+export const getallrecipe = (se: string) => {
   const session: MySession = {
-    ...JSON.parse(localStorage.getItem('user') ?? ''),
+    ...JSON.parse(localStorage.getItem(se) ?? ''),
   };
   const recipes = session.recipes.map((r) => {
     const sortedVersion = r.versions.sort((a, b) =>
@@ -14,9 +14,9 @@ export const getallrecipe = () => {
   return recipes;
 };
 
-export const getrecipe = (recipeId: number) => {
+export const getrecipe = (recipeId: number, se: string) => {
   const session: MySession = {
-    ...JSON.parse(localStorage.getItem('user') ?? ''),
+    ...JSON.parse(localStorage.getItem(se) ?? ''),
   };
   const recipe = session.recipes.find((r) => r.id === recipeId);
   if (!recipe || !recipe.versions || recipe.versions.length === 0) {
@@ -25,9 +25,13 @@ export const getrecipe = (recipeId: number) => {
   return recipe?.versions.sort((a, b) => b.date.localeCompare(a.date));
 };
 
-export const restorerecipe = (recipeId: number, versionId: number) => {
+export const restorerecipe = (
+  recipeId: number,
+  versionId: number,
+  se: string
+) => {
   const session: MySession = {
-    ...JSON.parse(localStorage.getItem('user') ?? ''),
+    ...JSON.parse(localStorage.getItem(se) ?? ''),
   };
   const recipe: Recipe[] = session.recipes.map((r) =>
     r.id === +recipeId
@@ -39,18 +43,21 @@ export const restorerecipe = (recipeId: number, versionId: number) => {
         }
       : r
   );
-  localStorage.setItem('user', JSON.stringify({ ...session, recipes: recipe }));
-  return getrecipe(+recipeId);
+  localStorage.setItem(
+    se,
+    JSON.stringify({ loginUser: session.loginUser, recipes: recipe })
+  );
+  return getrecipe(+recipeId, se);
 };
 
-export const removerecipe = (recipeId: number) => {
+export const removerecipe = (recipeId: number, se: string) => {
   const session: MySession = {
-    ...JSON.parse(localStorage.getItem('user') ?? ''),
+    ...JSON.parse(localStorage.getItem(se) ?? ''),
   };
   localStorage.setItem(
-    'user',
+    se,
     JSON.stringify({
-      ...session,
+      loginUser: session.loginUser,
       recipes: session.recipes.filter((r) => r.id !== recipeId),
     })
   );
@@ -62,9 +69,10 @@ export const editrecipe = (
   title: string,
   recipeTags: string[],
   recipeIngredients: string[],
-  recipeSteps: string[]
+  recipeSteps: string[],
+  se: string
 ) => {
-  const session = JSON.parse(localStorage.getItem('user') ?? '');
+  const session = JSON.parse(localStorage.getItem(se) ?? '');
   const s: MySession = { ...session };
 
   // 레시피에서 특정 id에 해당하는 레시피를 찾음
@@ -92,7 +100,7 @@ export const editrecipe = (
 
   // 로컬 스토리지에 새로운 데이터를 저장
   localStorage.setItem(
-    'user',
+    session.loginUser.email,
     JSON.stringify({
       ...s,
       recipes: recipes, // 업데이트된 레시피 배열 저장
@@ -105,13 +113,14 @@ export const putrecipe = (
   title: string,
   recipeTags: string[],
   recipeIngredients: string[],
-  recipeSteps: string[]
+  recipeSteps: string[],
+  se: string
 ) => {
-  const session = JSON.parse(localStorage.getItem('user') ?? '');
+  const session = JSON.parse(localStorage.getItem(se) ?? '');
   const s: MySession = { ...session };
   const id = Math.max(...s.recipes.map(({ id }) => id), 0) + 1;
   localStorage.setItem(
-    'user',
+    se,
     JSON.stringify({
       ...s,
       recipes: [

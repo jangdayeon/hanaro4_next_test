@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useState, useEffect } from 'react';
@@ -30,12 +31,13 @@ export default function Recipe({
 }: {
   params: { recipeId: number };
 }) {
+  const session = useSession().data?.user?.email ?? '';
   // 타이머 상태 초기화
   const [timers, setTimers] = useState<{ time: number; isRunning: boolean }[]>(
     []
   );
 
-  const [recipes, setRecipes] = useState(getrecipe(+recipeId));
+  const [recipes, setRecipes] = useState(getrecipe(+recipeId, session));
   const { id, title, tags, ingredients, steps } = recipes[0];
 
   useEffect(() => {
@@ -73,7 +75,7 @@ export default function Recipe({
   };
 
   const restore = (versionId: number) => {
-    setRecipes(restorerecipe(recipeId, versionId));
+    setRecipes(restorerecipe(recipeId, versionId, session));
   };
 
   return (
@@ -161,7 +163,7 @@ export default function Recipe({
         <Link href={`/recipes/${recipeId}/edit`}>
           <Button variant='btn-edit'>수정</Button>
         </Link>
-        <DelBtn id={id}></DelBtn>
+        <DelBtn id={id} se={session}></DelBtn>
         <Link href={`/recipes`}>
           <Button variant='btn-back'>목록으로</Button>
         </Link>

@@ -10,16 +10,17 @@ export default function recipes() {
   // eslint-disable-next-line react-hooks/rules-of-hooks
   const session = useSession().data?.user?.email ?? '';
   if (
-    !localStorage.getItem('user') ||
-    (localStorage.getItem('user') &&
-      JSON.parse(localStorage.getItem('user') || '{}').loginUser !== session)
+    !localStorage.getItem(session) ||
+    (localStorage.getItem(session) &&
+      JSON.parse(localStorage.getItem(session) || '{}').loginUser.email !==
+        session)
   ) {
     localStorage.setItem(
-      'user',
-      JSON.stringify({ ...SampleSession, loginUser: session })
+      session,
+      JSON.stringify({ ...SampleSession, loginUser: { email: session } })
     );
   }
-  const recipes = getallrecipe();
+  const recipes = getallrecipe(session);
 
   return (
     <>

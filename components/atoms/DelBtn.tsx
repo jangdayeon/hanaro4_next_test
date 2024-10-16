@@ -7,14 +7,15 @@ import Button from './Button';
 type Props = {
   // remove: () => void;
   id: number;
+  se: string;
 };
 
-export default function DelBook({ id }: Props) {
+export default function DelBook({ id, se }: Props) {
   const router = useRouter();
 
   const remove = async () => {
     if (!confirm('삭제하시겠습니까?')) return;
-    removerecipe(id);
+    removerecipe(id, se);
     router.push('/recipes');
   };
 

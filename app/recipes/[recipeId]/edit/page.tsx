@@ -1,5 +1,6 @@
 'use client';
 
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { editrecipe, getrecipe } from '@/lib/recipes';
@@ -10,7 +11,8 @@ export default function RecipeEdit({
 }: {
   params: { recipeId: number };
 }) {
-  const r = getrecipe(+recipeId)[0];
+  const session = useSession().data?.user?.email ?? '';
+  const r = getrecipe(+recipeId, session)[0];
   const [tags, setTags] = useState<string[]>(r.tags);
   const [ingredients, setIngredients] = useState<string[]>(r.ingredients);
   const [steps, setSteps] = useState<string[]>(r.steps);
@@ -37,7 +39,14 @@ export default function RecipeEdit({
       return;
     }
 
-    editrecipe(recipeId, title, recipeTags, recipeIngredients, recipeSteps);
+    editrecipe(
+      recipeId,
+      title,
+      recipeTags,
+      recipeIngredients,
+      recipeSteps,
+      session
+    );
     router.push('/recipes');
   }
 
