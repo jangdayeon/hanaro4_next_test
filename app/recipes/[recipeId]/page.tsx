@@ -1,9 +1,9 @@
 'use client';
 
-import { getrecipe, restorerecipe } from '@/actions/recipes';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { useState, useEffect } from 'react';
+import { getrecipe, restorerecipe } from '@/lib/recipes';
 import Button from '@/components/atoms/Button';
 import DelBtn from '@/components/atoms/DelBtn';
 
@@ -151,7 +151,7 @@ export default function Recipe({
                 </Button>
               </li>
             ) : (
-              <></>
+              <li key={i}></li>
             )
           )}
         </ol>

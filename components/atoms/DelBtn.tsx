@@ -1,7 +1,7 @@
 'use client';
 
-import { removerecipe } from '@/actions/recipes';
 import { useRouter } from 'next/navigation';
+import { removerecipe } from '@/lib/recipes';
 import Button from './Button';
 
 type Props = {

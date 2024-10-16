@@ -1,9 +1,9 @@
 'use client';
 
-import { getallrecipe } from '@/actions/recipes';
 import { SampleSession } from '@/hooks/session-context';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
+import { getallrecipe } from '@/lib/recipes';
 import Button from '@/components/atoms/Button';
 
 export default function recipes() {

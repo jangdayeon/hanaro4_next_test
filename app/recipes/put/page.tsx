@@ -1,8 +1,8 @@
 'use client';
 
-import { putrecipe } from '@/actions/recipes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { putrecipe } from '@/lib/recipes';
 import Button from '@/components/atoms/Button';
 
 export default function RecipePut() {
@@ -11,10 +11,13 @@ export default function RecipePut() {
   const [steps, setSteps] = useState<string[]>([]);
   const router = useRouter();
 
-  async function saveRecipe(e: React.FormEvent) {
+  function saveRecipe(e: React.FormEvent) {
     e.preventDefault();
 
-    const title = (e.target as HTMLFormElement).title.value;
+    const t = (e.currentTarget as HTMLFormElement).elements.namedItem(
+      'title'
+    ) as HTMLInputElement;
+    const title = t.value;
     const recipeTags = tags;
     const recipeIngredients = ingredients;
     const recipeSteps = steps;

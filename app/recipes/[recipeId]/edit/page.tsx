@@ -1,8 +1,8 @@
 'use client';
 
-import { editrecipe, getrecipe } from '@/actions/recipes';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
+import { editrecipe, getrecipe } from '@/lib/recipes';
 import Button from '@/components/atoms/Button';
 
 export default function RecipeEdit({
@@ -16,7 +16,7 @@ export default function RecipeEdit({
   const [steps, setSteps] = useState<string[]>(r.steps);
   const router = useRouter();
 
-  async function saveRecipe(e: React.FormEvent) {
+  function saveRecipe(e: React.FormEvent) {
     e.preventDefault();
 
     const t = (e.currentTarget as HTMLFormElement).elements.namedItem(
@@ -163,8 +163,8 @@ export default function RecipeEdit({
           </div>
           <div>
             추가된 단계:
-            {steps.map((step) => (
-              <div key={step} className='mr-2'>
+            {steps.map((step, i) => (
+              <div key={i} className='mr-2'>
                 {step}
                 <Button variant='btn-danger' onClick={() => removeStep(step)}>
                   삭제
