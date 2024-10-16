@@ -1,6 +1,19 @@
 import { defaultVersions, Recipe } from '@/app/api/recipes/recipedata';
 import { MySession } from '@/hooks/session-context';
 
+export const getallrecipe = () => {
+  const session: MySession = {
+    ...JSON.parse(localStorage.getItem('user') ?? ''),
+  };
+  const recipes = session.recipes.map((r) => {
+    const sortedVersion = r.versions.sort((a, b) =>
+      b.date.localeCompare(a.date)
+    );
+    return { ...sortedVersion[0], id: r.id };
+  });
+  return recipes;
+};
+
 export const getrecipe = (recipeId: number) => {
   const session: MySession = {
     ...JSON.parse(localStorage.getItem('user') ?? ''),
@@ -26,7 +39,6 @@ export const restorerecipe = (recipeId: number, versionId: number) => {
         }
       : r
   );
-
   localStorage.setItem('user', JSON.stringify({ ...session, recipes: recipe }));
   return getrecipe(+recipeId);
 };
@@ -77,8 +89,6 @@ export const editrecipe = (
         }
       : r
   );
-
-  console.log('🚀 ~ recipes:', recipes);
 
   // 로컬 스토리지에 새로운 데이터를 저장
   localStorage.setItem(

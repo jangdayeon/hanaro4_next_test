@@ -1,28 +1,11 @@
 'use client';
 
-import { MySession } from '@/hooks/session-context';
+import { getallrecipe } from '@/actions/recipes';
 import Link from 'next/link';
 import Button from '@/components/atoms/Button';
 
 export default function recipes() {
-  // const recipes: recipe[] = await fetch(
-  //   'http://localhost:3000/api/recipes'
-  // ).then((response) => {
-  //   if (!response.ok) {
-  //     return notFound();
-  //   }
-  //   return response.json();
-  // });
-
-  const session: MySession = {
-    ...JSON.parse(localStorage.getItem('user') ?? ''),
-  };
-  const recipes = session.recipes.map((r) => {
-    const sortedVersion = r.versions.sort((a, b) =>
-      b.date.localeCompare(a.date)
-    );
-    return sortedVersion[0];
-  });
+  const recipes = getallrecipe();
 
   return (
     <>
