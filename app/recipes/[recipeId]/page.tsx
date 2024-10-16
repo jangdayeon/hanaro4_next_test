@@ -81,7 +81,6 @@ export default function Recipe({
       <h1 className='font-bold text-lg'>{title}</h1>
       <div className='p-3'>
         <h2 className='font-semibold text-lg'>조리 과정</h2>
-
         {steps?.map((s, i) => (
           <div key={i}>
             <div>
@@ -142,15 +141,19 @@ export default function Recipe({
       <div className='p-3'>
         <h2 className='font-semibold text-lg'>수정 기록</h2>
         <ol>
-          {recipes?.map((r, i) => (
-            <li key={i}>
-              <span className='font-bold'>버전{i + 1} </span>
-              {formatDate(r.date)}
-              <Button variant='btn-primary' onClick={() => restore(r.id)}>
-                이 버전으로 복원
-              </Button>
-            </li>
-          ))}
+          {recipes?.map((r, i) =>
+            i !== 0 ? (
+              <li key={i}>
+                <span className='font-bold'>버전{i} </span>
+                {formatDate(r.date)}
+                <Button variant='btn-primary' onClick={() => restore(r.id)}>
+                  이 버전으로 복원
+                </Button>
+              </li>
+            ) : (
+              <></>
+            )
+          )}
         </ol>
       </div>
 

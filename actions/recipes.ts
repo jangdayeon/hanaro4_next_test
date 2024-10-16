@@ -68,7 +68,7 @@ export const editrecipe = (
   const s: MySession = { ...session };
 
   // 레시피에서 특정 id에 해당하는 레시피를 찾음
-  const versions = s.recipes.find((r) => r.id === recipeId)?.versions ?? [];
+  const versions = s.recipes.find((r) => r.id === +recipeId)?.versions ?? [];
 
   // 각 레시피를 업데이트
   const recipes = s.recipes.map((r) =>
