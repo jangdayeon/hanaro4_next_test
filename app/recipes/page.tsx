@@ -1,16 +1,29 @@
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import Button from '@/components/atoms/Button';
-import { recipe } from '../api/recipes/recipedata';
+'use client';
 
-export default async function recipes() {
-  const recipes: recipe[] = await fetch(
-    'http://localhost:3000/api/recipes'
-  ).then((response) => {
-    if (!response.ok) {
-      return notFound();
-    }
-    return response.json();
+import { MySession } from '@/hooks/session-context';
+import Link from 'next/link';
+import Button from '@/components/atoms/Button';
+
+export default function recipes() {
+  // const recipes: recipe[] = await fetch(
+  //   'http://localhost:3000/api/recipes'
+  // ).then((response) => {
+  //   if (!response.ok) {
+  //     return notFound();
+  //   }
+  //   return response.json();
+  // });
+
+  const session: MySession = {
+    ...JSON.parse(localStorage.getItem('user') ?? ''),
+  };
+  const recipes = session.recipes.map((r) => {
+    console.log('확인', r.versions);
+    const sortedVersion = r.versions.sort((a, b) =>
+      b.date.localeCompare(a.date)
+    );
+    console.log('🚀 ~ recipes ~ recipes:', sortedVersion);
+    return sortedVersion[0];
   });
   return (
     <>

@@ -57,12 +57,14 @@ export default function RecipePut() {
           {
             id,
             versions: [
-              1,
-              title,
-              recipeTags,
-              recipeIngredients,
-              recipeSteps,
-              new Date().toISOString(),
+              {
+                id: 1,
+                title: title,
+                tags: recipeTags,
+                ingredients: recipeIngredients,
+                steps: recipeSteps,
+                date: new Date().toISOString(),
+              },
             ],
           },
         ],
