@@ -19,7 +19,10 @@ export default function RecipeEdit({
   async function saveRecipe(e: React.FormEvent) {
     e.preventDefault();
 
-    const title = (e.target as HTMLFormElement).title.value;
+    const t = (e.currentTarget as HTMLFormElement).elements.namedItem(
+      'title'
+    ) as HTMLInputElement;
+    const title = t.value;
     const recipeTags = tags;
     const recipeIngredients = ingredients;
     const recipeSteps = steps;

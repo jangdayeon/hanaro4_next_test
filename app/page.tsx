@@ -7,10 +7,12 @@ import { SampleSession } from '../hooks/session-context';
 
 export default function Home() {
   const session = useSession().data?.user?.email ?? '';
-  localStorage.setItem(
-    'user',
-    JSON.stringify({ ...SampleSession, loginUser: session })
-  );
+  if (!localStorage.getItem('user')) {
+    localStorage.setItem(
+      'user',
+      JSON.stringify({ ...SampleSession, loginUser: session })
+    );
+  }
 
   return (
     <>
