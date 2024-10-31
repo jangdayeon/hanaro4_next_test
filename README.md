@@ -1,36 +1,16 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 나만의 레시피 관리 프로젝트
 
-## Getting Started
+## 1. 프로젝트 소개 🗒
+React + Next.js 풀스택 게시판 프로젝트
+ - React Client Component
+ - Next Server Component & Actions
+   
+## 2. 프로젝트 기간
+_2024-10-13 ~ 2024-10-16_
 
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
-
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 3. 느낀점
+- 타입스크립트(TS)로 명확한 타입을 정의하고, eslint와 prettier를 통해 코드 규칙과 스타일을 일정하게 유지할 수 있었습니다. 덕분에 오류를 사전에 방지하고, 발생한 에러도 쉽게 위치를 파악해 해결할 수 있었습니다.
+- 퍼블리싱 작업에서는 Tailwind를 활용해 작업 속도가 확연히 빨라졌습니다.
+- Next.js를 사용하며 SSR과 CSR의 차이를 체감했습니다. 이전에는 스프링에서 JSP와 thymeleaf로 SSR 작업을 진행했는데, 작은 프로젝트에서는 오버헤드가 느껴졌습니다. 반면, Next.js에서는 필요한 부분만 백엔드를 활용해 프론트엔드 개발에 집중할 수 있었고, 훨씬 생산적이라고 느꼈습니다. 앞으로는 개발 목적에 맞는 최적의 프레임워크를 선택할 수 있을 것 같습니다.
+- Next.js의 인증 라이브러리 덕분에 인증 처리가 훨씬 간편해져 매우 편리했습니다.
+- 앞으로 React를 사용할 때는 useContext를 활용한 훅을 관리하도록 구현해 보고 싶습니다. 또한, 서버로 Next.js와 Spring을 함께 사용할 경우, Redis를 통해 세션을 관리할 수 있는 풀 구현에 도전해보고 싶습니다.
